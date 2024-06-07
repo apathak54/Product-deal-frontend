@@ -1,17 +1,16 @@
-
+import React from 'react';
 
 const Filter = () => {
   return (
-    <div className="w-full flex justify-between items-center px-6 py-4 bg-white shadow-md space-x-4">
-      <div className="flex space-x-4">
+    <div className="w-full flex flex-col md:flex-row justify-between items-center px-6 py-4 bg-white shadow-md space-y-4 md:space-y-0 md:space-x-4">
+      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full">
         <input
           type="text"
           placeholder="Search"
-          className="p-2 border border-gray-300 w-80 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="p-2 border border-gray-300 w-full md:w-80 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-       
         <select
-          className="p-2 border border-gray-300  w-80 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="p-2 border border-gray-300 w-full md:w-80 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Status</option>
           <option value="open">Open</option>
@@ -20,7 +19,7 @@ const Filter = () => {
         </select>
         <input
           type="date"
-          className="p-2 border border-gray-300 w-80 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="p-2 border border-gray-300 w-full md:w-80 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Date"
         />
       </div>

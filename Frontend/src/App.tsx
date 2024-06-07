@@ -1,6 +1,7 @@
 import Appbar from './components/Appbar'
 import Filter from './components/Filter'
 import ImportLead from './components/ImportLead'
+import LeadForms from './components/LeadForms'
 
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
      <Appbar/>
      <Filter/>
      <ImportLead/>
+     <LeadForms/>
     </>
   )
 }
