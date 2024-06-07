@@ -131,7 +131,7 @@ const LeadForms: React.FC = () => {
         </button>
         <button
           onClick={handleImport}
-          className="bg-yellow-500 text-white px-4 py-2 rounded"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
         >
           Import
         </button>

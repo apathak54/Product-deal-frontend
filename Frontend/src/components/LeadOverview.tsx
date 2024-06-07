@@ -44,7 +44,7 @@ const LeadOverview: React.FC = () => {
     <div className="p-6 max-w-xl mx-auto bg-white rounded-xl shadow-md space-y-4">
       <div className="flex items-center space-x-4">
         <div className="flex-shrink-0">
-          <div className="h-12 w-12 rounded-full bg-yellow-500 flex items-center justify-center text-white font-bold text-xl">
+          <div className="h-12 w-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-xl">
             E
           </div>
         </div>
@@ -69,7 +69,7 @@ const LeadOverview: React.FC = () => {
           <div className="text-2xl">{leadDetails.openDeals}</div>
           <div className="text-gray-500">Open Deals</div>
         </div>
-        <button className="bg-yellow-500 text-white px-4 py-2 rounded">Create Deal</button>
+        <button className="bg-blue-500 text-white px-4 py-2 rounded">Create Deal</button>
       </div>
 
       <div className="space-y-2">
