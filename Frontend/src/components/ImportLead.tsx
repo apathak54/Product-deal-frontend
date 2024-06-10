@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone';
 const ImportLead: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [visible , setVisible] = useState(true)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -16,6 +17,7 @@ const ImportLead: React.FC = () => {
   const handleCancel = () => {
     setFile(null);
     setShowAlert(false);
+    setVisible(false)
   };
 
   const handleImport = () => {
@@ -38,9 +40,11 @@ const ImportLead: React.FC = () => {
       'application/pdf': ['.pdf']
     }
   });
-
+  if(!visible){
+    return null ;
+  }
   return (
-    <div className="max-w-md mx-auto mt-6 shadow-xl p-6 bg-white rounded-md">
+    <div className="">
       <h1 className='font-semibold text-xl mb-4'>Import Leads</h1>
       {showAlert && (
         <div className="mb-4 p-4 border border-green-300 bg-green-100 text-green-800 rounded-md">

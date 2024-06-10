@@ -24,22 +24,7 @@ const Appbar = () => {
         <span className="text-xl font-semibold">Leads</span>
       </div>
       <div className="flex items-center space-x-6">
-        <a href="#home" className="relative text-gray-600 hover:text-gray-900 group">
-          Home
-          <span className="absolute left-1/2 bottom-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 transform -translate-x-1/2 group-hover:w-full"></span>
-        </a>
-        <a href="#features" className="relative text-gray-600 hover:text-gray-900 group">
-          Features
-          <span className="absolute left-1/2 bottom-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 transform -translate-x-1/2 group-hover:w-full"></span>
-        </a>
-        <a href="#pricing" className="relative text-gray-600 hover:text-gray-900 group">
-          Pricing
-          <span className="absolute left-1/2 bottom-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 transform -translate-x-1/2 group-hover:w-full"></span>
-        </a>
-        <a href="#contact" className="relative text-gray-600 hover:text-gray-900 group">
-          Contact
-          <span className="absolute left-1/2 bottom-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 transform -translate-x-1/2 group-hover:w-full"></span>
-        </a>
+        <div className="rounded-full">U</div>
       </div>
     </div>
   );

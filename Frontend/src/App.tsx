@@ -1,22 +1,21 @@
-import Appbar from './components/Appbar'
-import DataGridDemo from './components/DataGrid'
-import Filter from './components/Filter'
-import ImportLead from './components/ImportLead'
-import LeadForms from './components/LeadForms'
-import LeadOverview from './components/LeadOverview'
-
+import {Routes , Route , BrowserRouter} from 'react-router-dom'
+import Mainpage from './pages/Mainpage'
+import Signup from './pages/Signup'
+import Signin from './pages/Signin'
 
 function App() {
  
 
   return (
     <>
-     <Appbar/>
-     <Filter/>
-     <ImportLead/>
-     <LeadForms/>
-     <LeadOverview/>
-     <DataGridDemo/>
+    <BrowserRouter>
+    <Routes>
+      <Route path='/' element={<Mainpage/>} />
+      <Route path="/signup" element={<Signup/>} />
+      <Route path="/signin" element={<Signin />} />
+    </Routes>
+    </BrowserRouter>
+    
     </>
   )
 }
