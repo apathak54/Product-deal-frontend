@@ -1,4 +1,5 @@
 import Appbar from './components/Appbar'
+import DataGridDemo from './components/DataGrid'
 import Filter from './components/Filter'
 import ImportLead from './components/ImportLead'
 import LeadForms from './components/LeadForms'
@@ -15,6 +16,7 @@ function App() {
      <ImportLead/>
      <LeadForms/>
      <LeadOverview/>
+     <DataGridDemo/>
     </>
   )
 }
