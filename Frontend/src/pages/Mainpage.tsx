@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../config/axios';
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate()
@@ -13,19 +14,12 @@ const MainPage: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const url = isSignUp ? 'http://localhost:8080/api/users/register' : 'http://localhost:8080/api/users/login';
+    const url = isSignUp ? '/users/register' : '/users/login';
     const payload = isSignUp ? { fullname, email, password } : { email, password };
 
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json();
+      const response = await axiosInstance.post(url,payload);
+      const result = response.data;
       if (result.success) {
         setSuccess(true);
         setMessage(result.message);
