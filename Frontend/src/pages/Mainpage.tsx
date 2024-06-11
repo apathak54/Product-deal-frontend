@@ -1,7 +1,45 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const MainPage: React.FC = () => {
+  const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false);
+  const [fullname, setFullname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const url = isSignUp ? 'http://localhost:8080/api/users/register' : 'http://localhost:8080/api/users/login';
+    const payload = isSignUp ? { fullname, email, password } : { email, password };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setSuccess(true);
+        setMessage(result.message);
+        navigate('/deals')
+        
+      } else {
+        setSuccess(false);
+        setMessage(result.message);
+      }
+    } catch (error) {
+      setSuccess(false);
+      setMessage('Something went wrong. Please try again.');
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
@@ -10,15 +48,17 @@ const MainPage: React.FC = () => {
         <h2 className="text-3xl font-bold text-center mb-8">
           {isSignUp ? 'Create an Account' : 'Welcome Back!'}
         </h2>
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           {isSignUp && (
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="fullname" className="block text-sm font-medium text-gray-700">
                 Full Name
               </label>
               <input
                 type="text"
-                id="name"
+                id="fullname"
+                value={fullname}
+                onChange={(e) => setFullname(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 required
               />
@@ -31,6 +71,8 @@ const MainPage: React.FC = () => {
             <input
               type="email"
               id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
             />
@@ -42,6 +84,8 @@ const MainPage: React.FC = () => {
             <input
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
             />
@@ -100,6 +144,11 @@ const MainPage: React.FC = () => {
               </>
             )}
           </div>
+          {message && (
+            <div className={`mt-4 text-center ${success ? 'text-green-500' : 'text-red-500'}`}>
+              {message}
+            </div>
+          )}
         </form>
       </div>
 
