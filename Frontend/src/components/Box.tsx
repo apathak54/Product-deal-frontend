@@ -38,7 +38,7 @@ const Box: React.FC = () => {
   const [data, setData] = useState<RowData[]>(rows);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
-  setData(rows)
+  
   const handleEdit = (row: RowData) => {
     console.log('Edit row:', row);
     // Add your edit logic here
@@ -67,7 +67,7 @@ const Box: React.FC = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
-
+  setData(rows)
   return (
     <div className="bg-white w-[90%] mx-auto flex flex-col justify-center p-4 border-sm-gray">
       {data.length > 0 ? (
