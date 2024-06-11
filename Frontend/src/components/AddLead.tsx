@@ -1,8 +1,13 @@
 import React from 'react';
 import LeadDetails from './LeadDetails';
 import EmailTemplate from './EmailTemplate';
+import { useNavigate } from 'react-router-dom';
 
 const AddLead: React.FC = () => {
+  const navigate = useNavigate()
+  const handleAdd = () =>{
+    navigate('/deals')
+  }
   return (
     <div className=" flex flex-col items-center justify-center ">
         <h1 className="text-xl font-bold text-center mb-6 bg-yellow-400 rounded-md w-full">ADD NEW LEAD</h1>
@@ -15,7 +20,7 @@ const AddLead: React.FC = () => {
           <button  className="bg-yellow-500 text-white font-bold py-2 px-4 rounded">
             CANCEL
           </button>
-          <button className="bg-yellow-500 text-white font-bold py-2 px-4 rounded">
+          <button onClick={handleAdd} className="bg-yellow-500 text-white font-bold py-2 px-4 rounded">
             ADD
           </button>
         </div>
