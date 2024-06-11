@@ -13,7 +13,7 @@ const MainPage: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const url = isSignUp ? 'http://localhost:8080/api/users/register' : 'http://localhost:8080/api/users/login';
+    const url = isSignUp ? 'https://product-deal-backend.onrender.com/api/users/register' : 'https://product-deal-backend.onrender.com/api/users/login';
     const payload = isSignUp ? { fullname, email, password } : { email, password };
 
     try {
