@@ -38,7 +38,7 @@ const Box: React.FC = () => {
   const [data, setData] = useState<RowData[]>(rows);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
-
+  setData(rows)
   const handleEdit = (row: RowData) => {
     console.log('Edit row:', row);
     // Add your edit logic here
