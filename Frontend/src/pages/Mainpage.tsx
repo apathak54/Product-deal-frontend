@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../config/axios';
 
 const MainPage: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
@@ -18,13 +17,19 @@ const MainPage: React.FC = () => {
     const payload = isSignUp ? { fullname, email, password } : { email, password };
 
     try {
-      const response = await axiosInstance.post(url,payload);
-      const result = response.data;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
       if (result.success) {
         setSuccess(true);
         setMessage(result.message);
         navigate('/deals')
-        
       } else {
         setSuccess(false);
         setMessage(result.message);

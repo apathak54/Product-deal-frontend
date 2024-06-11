@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 interface RowData {
@@ -35,7 +35,7 @@ const rows: RowData[] = [
 ];
 
 const Box: React.FC = () => {
-  const [data, setData] = useState<RowData[]>(rows);
+  const [data, setData] = useState<RowData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
   
@@ -67,7 +67,10 @@ const Box: React.FC = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
-  setData(rows)
+  useEffect(() => {
+    setData(rows);
+  }, []);
+
   return (
     <div className="bg-white w-[90%] mx-auto flex flex-col justify-center p-4 border-sm-gray">
       {data.length > 0 ? (
