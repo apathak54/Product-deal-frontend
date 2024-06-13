@@ -1,10 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import  { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-const ImportLead: React.FC = () => {
+interface props {
+  onClose: () => void;
+}
+const ImportLead = ({onClose} : props ) => {
   const [file, setFile] = useState<File | null>(null);
   const [showAlert, setShowAlert] = useState(false);
-  const [visible , setVisible] = useState(true)
+  
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -17,7 +20,8 @@ const ImportLead: React.FC = () => {
   const handleCancel = () => {
     setFile(null);
     setShowAlert(false);
-    setVisible(false)
+   
+    onClose()
   };
 
   const handleImport = () => {
@@ -40,9 +44,7 @@ const ImportLead: React.FC = () => {
       'application/pdf': ['.pdf']
     }
   });
-  if(!visible){
-    return null ;
-  }
+ 
   return (
     <div className="">
       <h1 className='font-semibold text-xl mb-4'>Import Leads</h1>

@@ -1,12 +1,18 @@
-import React from 'react';
+
 import LeadDetails from './LeadDetails';
 import EmailTemplate from './EmailTemplate';
 import { useNavigate } from 'react-router-dom';
 
-const AddLead: React.FC = () => {
+interface props {
+  onClose: () => void;
+}
+const  AddLead = ({onClose} : props) => {
   const navigate = useNavigate()
   const handleAdd = () =>{
     navigate('/deals')
+  }
+  const handleCancel = () => {
+     onClose()
   }
   return (
     <div className=" flex flex-col items-center justify-center ">
@@ -17,7 +23,7 @@ const AddLead: React.FC = () => {
           <EmailTemplate />
         </div>
         <div className="flex justify-between mt-6">
-          <button  className="bg-yellow-500 text-white font-bold py-2 px-4 rounded">
+          <button onClick={handleCancel}  className="bg-yellow-500 text-white font-bold py-2 px-4 rounded">
             CANCEL
           </button>
           <button onClick={handleAdd} className="bg-yellow-500 text-white font-bold py-2 px-4 rounded">

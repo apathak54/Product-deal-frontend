@@ -61,13 +61,13 @@ const Filter = () => {
         <div>
          
           {/* Add your import leads form or content here */}
-          <ImportLead/>
+          <ImportLead onClose={closeModal}/>
         </div>
       </Modal>
 
       <Modal show={showAddModal} onClose={closeModal}>
         <div>
-          <AddLead/>
+          <AddLead onClose={closeModal}/>
         </div>
 
       </Modal>
