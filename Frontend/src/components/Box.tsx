@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import axiosInstance from '../config/axios';
 import { useParams } from 'react-router-dom';
+import ImportLead from './ImportLead';
+import Modal from './Modal';
 
 interface RowData {
   _id: string;
@@ -12,10 +14,11 @@ interface RowData {
   STATUS: boolean;
 }
 
-
 const Box: React.FC = () => {
+  const [showModal , setShowAddModal] = useState(false)
   const [data, setData] = useState<RowData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+ 
   const {workspaceId } = useParams();
   const rowsPerPage = 10;
   let  i= 1 ;
@@ -41,8 +44,14 @@ const Box: React.FC = () => {
   };
 
   const handleImportLeads = () => {
+    setShowAddModal(true)
+    
     console.log('Import leads');
     // Add your import leads logic here
+  };
+  const closeModal = () => {
+   
+    setShowAddModal(false);
   };
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -64,10 +73,10 @@ const Box: React.FC = () => {
   }, [workspaceId]);
 
   return (
-    <div className="bg-white w-[90%] mx-auto flex flex-col justify-center p-4 border-sm-gray">
+    <div className="relative bg-white w-[90%] mx-auto flex flex-col  p-4 border-sm-gray ">
       {data.length > 0 ? (
         <>
-          <div className="overflow-x-auto w-full  mx-auto">
+          <div className="overflow-x-auto w-full h-[75vh] mx-auto">
             <table className="min-w-full bg-white">
               <thead className="bg-gray-200">
                 <tr>
@@ -129,9 +138,9 @@ const Box: React.FC = () => {
                 ))}
               </tbody>
             </table>
-            <div className="flex items-center justify-center  mt-4">
+            <div className="absolute bottom-0 w-full mx-auto flex  justify-end  mt-4 pr-8">
            
-            <div className="text-sm text-gray-700">
+            <div className="text-sm text-center text-gray-700">
               {indexOfFirstRow + 1}-{Math.min(indexOfLastRow, data.length)} of {data.length}
             </div>
             <button
@@ -153,10 +162,18 @@ const Box: React.FC = () => {
           
         </>
       ) : (
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center bg-white w-[90%] mx-auto flex flex-col  p-4 border-sm-gray h-[75vh]">
           <button onClick={handleImportLeads} className="px-4 py-2 bg-blue-500 text-white rounded">
             Import Leads
+           
           </button>
+          <Modal show={showModal} onClose={closeModal}>
+        <div>
+         
+          {/* Add your import leads form or content here */}
+          <ImportLead onClose={closeModal}/>
+        </div>
+      </Modal>
         </div>
       )}
     </div>
