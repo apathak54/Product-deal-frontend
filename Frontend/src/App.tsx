@@ -1,6 +1,7 @@
 import {Routes , Route , BrowserRouter} from 'react-router-dom'
 import Mainpage from './pages/Mainpage'
 import Deals from './pages/Deals'
+import Workspace from './pages/Workspace'
 
 function App() {
  
@@ -11,10 +12,9 @@ function App() {
     <Routes>
       <Route path='/deals' element={<Deals/>} />
       <Route path="/" element={<Mainpage/>} />
-     
+      <Route path='/workspace' element={<Workspace/>} />
     </Routes>
-    </BrowserRouter>
-    
+    </BrowserRouter>  
     </>
   )
 }

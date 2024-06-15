@@ -2,8 +2,8 @@ import axios, { AxiosInstance } from 'axios';
 // ** Config
 
 // Define the base URL for API requests
-const baseURL = 'https://product-deal-backend.onrender.com'
-// const baseURL = 'http://localhost:8080'
+ // const baseURL = 'https://product-deal-backend.onrender.com'
+const baseURL = 'http://localhost:8080'
 
 // Create an instance of Axios with default configuration
 const axiosInstance: AxiosInstance = axios.create({
@@ -13,11 +13,18 @@ const axiosInstance: AxiosInstance = axios.create({
   }
 })
 
-axiosInstance.interceptors.request.use(function (config) {
-    console.log('config',config);
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token'); // Replace 'your_token_key' with your actual token key
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    console.log('config', config);
     return config;
-  }, function (error) {
+  },
+  (error) => {
     return Promise.reject(error);
-  });
+  }
+);
 
 export default axiosInstance

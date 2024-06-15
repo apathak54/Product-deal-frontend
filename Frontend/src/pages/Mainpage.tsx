@@ -20,10 +20,12 @@ const MainPage: React.FC = () => {
     try {
       const response = await axiosInstance.post(url,payload);
       const result = response.data;
+      console.log(response.data)
+      localStorage.setItem('token',response.data.token)
       if (result.success) {
         setSuccess(true);
         setMessage(result.message);
-        navigate('/deals')
+        navigate('/workspace')
         
       } else {
         setSuccess(false);
