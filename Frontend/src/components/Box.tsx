@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import axiosInstance from '../config/axios';
+import { useParams } from 'react-router-dom';
 
 interface RowData {
-  id: number;
-  CompanyName: string;
-  ClientName: string;
-  Email: string;
+  _id: string;
+  companyName: string;
+  clientName: string;
+  email: string;
   createdAt: string;
   STATUS: boolean;
 }
@@ -14,8 +16,20 @@ interface RowData {
 const Box: React.FC = () => {
   const [data, setData] = useState<RowData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const {workspaceId } = useParams();
   const rowsPerPage = 10;
+  let  i= 1 ;
   
+  const fetchWorkspaceClient = async () => {
+    try {
+      const response = await axiosInstance.get(`/clients/${workspaceId}`);
+      setData(response.data.clients);
+      console.log(response.data.clients);
+    } catch (error) {
+      console.error('Error fetching workspaces:', error);
+    }
+  };
+
   const handleEdit = (row: RowData) => {
     console.log('Edit row:', row);
     // Add your edit logic here
@@ -45,8 +59,9 @@ const Box: React.FC = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
   useEffect(() => {
-    setData(rows);
-  }, []);
+
+   fetchWorkspaceClient();
+  }, [workspaceId]);
 
   return (
     <div className="bg-white w-[90%] mx-auto flex flex-col justify-center p-4 border-sm-gray">
@@ -87,12 +102,12 @@ const Box: React.FC = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {currentRows.map((row) => (
-                  <tr key={row.id}>
-                    <td className="px-6 py-4 whitespace-nowrap font-semibold text-md font-medium text-gray-900">{row.id}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-md font-semibold text-gray-500">{row.ClientName}</td>
-                    <td className="px-6 py-4 whitespace-nowrap font-semibold  text-md text-gray-500">{row.CompanyName}</td>
-                    <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500">{row.Email}</td>
-                    <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500">{`${row.ClientName} ${row.CompanyName}`}</td>
+                  <tr key={row._id}>
+                    <td className="px-6 py-4 whitespace-nowrap font-semibold text-md font-medium text-gray-900">{i++}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-md font-semibold text-gray-500">{row.clientName}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-semibold  text-md text-gray-500">{row.companyName}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500">{row.email}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500">{`${row.clientName} ${row.companyName}`}</td>
                     <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500 ">
                       <button onClick={() => handleEdit(row)} className="text-yellow-500  ml-2  ">
                         <FaEdit />
