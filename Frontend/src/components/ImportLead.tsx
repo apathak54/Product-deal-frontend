@@ -1,70 +1,73 @@
-import  { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React, {  useState } from 'react';
+import axiosInstance from '../config/axios';
+import { useParams } from 'react-router-dom';
 
-interface props {
+
+interface Props {
   onClose: () => void;
 }
-const ImportLead = ({onClose} : props ) => {
+
+const ImportLead = ({ onClose }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [showAlert, setShowAlert] = useState(false);
-  
+  const { workspaceId } = useParams<{ workspaceId: string }>(); // Assuming workspaceId is a string
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      setFile(acceptedFiles[0]);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
       setShowAlert(true);
       setTimeout(() => setShowAlert(false), 3000);
     }
-  }, []);
+  };
 
   const handleCancel = () => {
     setFile(null);
     setShowAlert(false);
-   
-    onClose()
+    onClose();
   };
 
-  const handleImport = () => {
+  const handleImport = async () => {
     if (file) {
-      // Implement import logic here
-      console.log(`Importing file: ${file.name}`);
-      // Reset file after import
-      setFile(null);
-      setShowAlert(false);
-      alert('File imported successfully!');
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await axiosInstance.post(`/clients/${workspaceId}/upload-csv`, formData);
+        console.log('File uploaded successfully:', response.data);
+        // Reset file after successful upload
+        setFile(null);
+        setShowAlert(false);
+        alert('File imported successfully!');
+      } catch (error) {
+        console.error('Error uploading file:', error); // Log detailed error
+        alert('Failed to upload file. Please try again.');
+      }
+      
     }
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-      'application/vnd.ms-excel': ['.xls'],
-      'image/*': ['.jpeg', '.jpg', '.png', '.gif'],
-      'application/pdf': ['.pdf']
-    }
-  });
- 
   return (
     <div className="">
-      <h1 className='font-semibold text-xl mb-4'>Import Leads</h1>
+      <h1 className="font-semibold text-xl mb-4">Import Leads</h1>
       {showAlert && (
         <div className="mb-4 p-4 border border-green-300 bg-green-100 text-green-800 rounded-md">
           File successfully uploaded!
         </div>
       )}
-      <div
-        {...getRootProps()}
-        className="w-full h-40 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md p-4 bg-white cursor-pointer hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <input {...getInputProps()} />
-        {isDragActive ? (
-          <p className="text-blue-500">Drop the files here ...</p>
-        ) : (
+      <div className="w-full h-40 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md p-4 bg-white cursor-pointer hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input
+          type="file"
+          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          onChange={handleFileChange}
+          className="hidden"
+          id="file-upload-input"
+        />
+        <label htmlFor="file-upload-input" className="w-full h-full flex flex-col items-center justify-center">
           <p className="text-gray-600">
-            Drag and drop an Excel sheet, image, or PDF here, or click to browse
+            Click to select a CSV or Excel file
           </p>
-        )}
+        </label>
       </div>
       {file && (
         <div className="mt-4 p-4 border border-gray-300 rounded-md bg-white shadow-sm">

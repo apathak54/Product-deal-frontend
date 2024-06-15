@@ -9,13 +9,13 @@ const baseURL = 'http://localhost:8080'
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: `${baseURL}/api`, // Base URL for all requests
   headers: {
-    'Content-Type': 'application/json' //  Default content type
+    'Content-Type': 'application/json'
   }
 })
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token'); // Replace 'your_token_key' with your actual token key
+    const token = localStorage.getItem('token'); 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
