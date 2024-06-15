@@ -13,13 +13,16 @@ interface WorkspaceCardProps {
 const WorkspaceCard: React.FC<WorkspaceCardProps> = ({ title, description, createdAt, isAddNew, onAddNew, onClick }) => {
   if (isAddNew) {
     return (
+      
+
       <button
         onClick={onAddNew}
-        className="flex flex-col items-center justify-center w-64 h-64 text-gray-400 border-2 border-dashed border-gray-300 rounded-lg p-4 transition-transform transform hover:scale-105 hover:border-gray-400"
+        className="flex flex-col items-center justify-center w-64 mt-2 h-64 text-gray-400 border-2 border-dashed border-gray-300 rounded-lg p-4 transition-transform transform hover:scale-105 hover:border-gray-800"
       >
-        <FaPlus size={40} />
-        <span className="mt-2 text-lg font-semibold">Add Workspace</span>
+        <FaPlus size={80} />
+        <span className=" text-2xl   font-semibold">Add Workspace</span>
       </button>
+    
     );
   }
 

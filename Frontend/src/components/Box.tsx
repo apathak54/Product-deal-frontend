@@ -6,33 +6,9 @@ interface RowData {
   CompanyName: string;
   ClientName: string;
   Email: string;
-  DATE: string;
+  createdAt: string;
   STATUS: boolean;
 }
-
-const rows: RowData[] = [
-  { id: 1, CompanyName: 'Snow', ClientName: 'Jon', Email: 'jon.snow@example.com', DATE: '2023-06-01', STATUS: true },
-  { id: 2, CompanyName: 'Lannister', ClientName: 'Cersei', Email: 'cersei.lannister@example.com', DATE: '2023-06-02', STATUS: false },
-  { id: 3, CompanyName: 'Lannister', ClientName: 'Jaime', Email: 'jaime.lannister@example.com', DATE: '2023-06-03', STATUS: true },
-  { id: 4, CompanyName: 'Stark', ClientName: 'Arya', Email: 'arya.stark@example.com', DATE: '2023-06-04', STATUS: false },
-  { id: 5, CompanyName: 'Targaryen', ClientName: 'Daenerys', Email: 'daenerys.targaryen@example.com', DATE: '2023-06-05', STATUS: true },
-  { id: 6, CompanyName: 'Melisandre', ClientName: 'Melisandre', Email: 'melisandre@example.com', DATE: '2023-06-06', STATUS: false },
-  { id: 7, CompanyName: 'Clifford', ClientName: 'Ferrara', Email: 'ferrara.clifford@example.com', DATE: '2023-06-07', STATUS: true },
-  { id: 8, CompanyName: 'Frances', ClientName: 'Rossini', Email: 'rossini.frances@example.com', DATE: '2023-06-08', STATUS: false },
-  { id: 9, CompanyName: 'Roxie', ClientName: 'Harvey', Email: 'harvey.roxie@example.com', DATE: '2023-06-09', STATUS: true },
-  { id: 10, CompanyName: 'Greyjoy', ClientName: 'Theon', Email: 'theon.greyjoy@example.com', DATE: '2023-06-10', STATUS: false },
-  { id: 11, CompanyName: 'Baratheon', ClientName: 'Stannis', Email: 'stannis.baratheon@example.com', DATE: '2023-06-11', STATUS: true },
-  { id: 12, CompanyName: 'Tyrell', ClientName: 'Margaery', Email: 'margaery.tyrell@example.com', DATE: '2023-06-12', STATUS: false },
-  { id: 13, CompanyName: 'Bolton', ClientName: 'Ramsay', Email: 'ramsay.bolton@example.com', DATE: '2023-06-13', STATUS: true },
-  { id: 14, CompanyName: 'Martell', ClientName: 'Oberyn', Email: 'oberyn.martell@example.com', DATE: '2023-06-14', STATUS: false },
-  { id: 15, CompanyName: 'Baelish', ClientName: 'Petyr', Email: 'petyr.baelish@example.com', DATE: '2023-06-15', STATUS: true },
-  { id: 16, CompanyName: 'Tarly', ClientName: 'Samwell', Email: 'samwell.tarly@example.com', DATE: '2023-06-16', STATUS: false },
-  { id: 17, CompanyName: 'Tarth', ClientName: 'Brienne', Email: 'brienne.tarth@example.com', DATE: '2023-06-17', STATUS: true },
-  { id: 18, CompanyName: 'Sand', ClientName: 'Ellaria', Email: 'ellaria.sand@example.com', DATE: '2023-06-18', STATUS: false },
-  { id: 19, CompanyName: 'Seaworth', ClientName: 'Davos', Email: 'davos.seaworth@example.com', DATE: '2023-06-19', STATUS: true },
-  { id: 20, CompanyName: 'Mormont', ClientName: 'Jorah', Email: 'jorah.mormont@example.com', DATE: '2023-06-20', STATUS: false },
-  // Add more rows as needed
-];
 
 
 const Box: React.FC = () => {
@@ -125,7 +101,7 @@ const Box: React.FC = () => {
                         <FaTrashAlt />
                       </button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-500">{row.DATE}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-500">{row.createdAt}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-500">
                       <div className={`w-3 h-3 ml-4 flex justify-center rounded-full ${row.STATUS ? 'bg-green-500' : 'bg-red-500'}`} />
                     </td>

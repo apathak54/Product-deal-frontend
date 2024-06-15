@@ -86,7 +86,7 @@ const WorkspaceList: React.FC = () => {
             <option value="alphabetically">Alphabetically</option>
           </select>
         </div>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap  justify-center items-center gap-4">
           {workspaces.map((workspace) => (
             <WorkspaceCard
               key={workspace._id}
@@ -96,10 +96,10 @@ const WorkspaceList: React.FC = () => {
               onClick={() => handleWorkspaceClick(workspace._id)}
             />
           ))}
-          <div className='flex  shadow-lg'>
-
+          
           <WorkspaceCard  isAddNew onAddNew={handleAddWorkspace} />
-          </div>
+
+      
         </div>
         <Modal showModal={showModal} onClose={handleCloseModal} onSave={handleSaveWorkspace} />
       </div>
