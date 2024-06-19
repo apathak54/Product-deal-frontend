@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 // ** Config
 
 // Define the base URL for API requests
- // const baseURL = 'https://product-deal-backend.onrender.com'
+ //const baseURL = 'https://product-deal-backend.onrender.com'
 const baseURL = 'http://localhost:8080'
 
 // Create an instance of Axios with default configuration

@@ -8,8 +8,12 @@ const Appbar = () => {
   };
 
   const handleLogout = () => {
-    // Add your logout logic here
-  };
+    // Remove the user's authentication token from localStorage
+    localStorage.removeItem('token');
+
+    // Redirect the user to the login page
+    window.location.href = '/';
+};
 
   return (
     <div className="w-full flex justify-between items-center px-6 py-4 bg-white shadow-md">
