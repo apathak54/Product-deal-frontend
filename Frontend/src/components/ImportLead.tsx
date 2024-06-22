@@ -2,7 +2,6 @@ import React, {  useState } from 'react';
 import axiosInstance from '../config/axios';
 import { useParams } from 'react-router-dom';
 
-
 interface Props {
   onClose: () => void;
 }
@@ -10,7 +9,7 @@ interface Props {
 const ImportLead = ({ onClose }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [showAlert, setShowAlert] = useState(false);
-  const { workspaceId } = useParams<{ workspaceId: string }>(); // Assuming workspaceId is a string
+  const { workspaceId } = useParams<{ workspaceId: string }>();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -33,17 +32,19 @@ const ImportLead = ({ onClose }: Props) => {
       formData.append('file', file);
 
       try {
-        const response = await axiosInstance.post(`/clients/${workspaceId}/upload-csv`, formData);
+        const response = await axiosInstance.post(`/clients/${workspaceId}/upload-csv`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
         console.log('File uploaded successfully:', response.data);
-        // Reset file after successful upload
         setFile(null);
         setShowAlert(false);
         alert('File imported successfully!');
-      } catch (error) {
-        console.error('Error uploading file:', error); // Log detailed error
+      } catch (error : any ) {
+        console.error('Error uploading file:', error.response ? error.response.data : error.message); // Log detailed error
         alert('Failed to upload file. Please try again.');
       }
-      
     }
   };
 
