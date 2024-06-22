@@ -11,6 +11,7 @@ interface RowData {
   companyName: string;
   clientName: string;
   email: string;
+  template:string ;
   createdAt: string;
   STATUS: boolean;
 }
@@ -38,9 +39,17 @@ const Box: React.FC = () => {
 
  
 
-  const handleDelete = (row: RowData) => {
-    console.log('Delete row:', row);
-    // Add your delete logic here
+  const handleDelete = async (row: RowData) => {
+    try {
+      const response = await axiosInstance.delete(`/clients/deletleoneclient/${workspaceId}/${row._id}`);
+      console.log('Client deleted:', response.data);
+      // Update the data state to reflect the deletion
+      setData(data.filter(client => client._id !== row._id));
+      alert('Client deleted successfully');
+    } catch (error) {
+      console.error('Error deleting client:', error);
+      alert('Failed to delete client. Please try again.');
+    }
   };
 
   const handleImportLeads = () => {
