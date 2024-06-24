@@ -24,6 +24,8 @@ const Box: React.FC = () => {
   const [selectedClient, setSelectedClient] = useState<RowData | null>(null);
   const [data, setData] = useState<RowData[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const rowsPerPage = 10;
@@ -107,9 +109,14 @@ const Box: React.FC = () => {
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   //Filter data functionality
   const filteredData = data.filter((client) =>
-        client.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (client.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         client.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        client.email.toLowerCase().includes(searchQuery.toLowerCase())
+        client.email.toLowerCase().includes(searchQuery.toLowerCase())) && 
+        (selectedStatus === '' || 
+          (selectedStatus === 'open' && client.STATUS) ||
+          (selectedStatus === 'closed' && !client.STATUS) ||
+          (selectedStatus === 'pending' && client.STATUS === false)) && 
+          ((selectedDate === '' || client.createdAt.includes(selectedDate)))
       );
     
     
@@ -146,7 +153,10 @@ const Box: React.FC = () => {
                 value={searchQuery} // bind input value to state
                 onChange={handleSearchChange}
               />
-              <select className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select 
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Status</option>
                 <option value="open">Open</option>
                 <option value="closed">Closed</option>
@@ -154,6 +164,8 @@ const Box: React.FC = () => {
               </select>
               <input
                 type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
                 className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Date"
               />
