@@ -41,6 +41,10 @@ const Box: React.FC = () => {
 
   const handleDelete = async (row: RowData) => {
     try {
+      const confirmDelete = window.confirm('Are you sure you want to delete this client?');
+    if (!confirmDelete) {
+      return; // Cancel deletion if user clicks cancel in the confirmation dialog
+    }
       const response = await axiosInstance.delete(`/clients/deletleoneclient/${workspaceId}/${row._id}`);
       console.log('Client deleted:', response.data);
       // Update the data state to reflect the deletion
@@ -65,21 +69,21 @@ const Box: React.FC = () => {
     setShowEmailPreview(false);
   };
 
-  const handleSendEmail = async (template: string) => {
+  const handleEditEmail = async () => {
     if (!selectedClient) return;
 
     const data = {
-      template,
+      template:selectedClient.template,
       clientId: selectedClient._id,
     };
 
     try {
-      const response = await axiosInstance.post('http://localhost:8080/api/clients/sendEmail', data);
-      console.log('Email sent successfully:', response.data);
-      alert('Email sent successfully!');
+      const response = await axiosInstance.post('/email/save-draft', data);
+      console.log('Email saved successfully:', response.data);
+      alert('Email saved successfully!');
     } catch (error) {
       console.error('Error sending email:', error);
-      alert('Failed to send email. Please try again.');
+      alert('Failed to save email. Please try again.');
     }
 
     setShowEmailPreview(false);
@@ -193,8 +197,9 @@ const Box: React.FC = () => {
         <div>
           {selectedClient && (
             <EmailPreview
+            htmlContent={selectedClient.template}
               onClose={closeEmailPreview}
-              onSend={handleSendEmail}
+              onSend={handleEditEmail}
             />
           )}
         </div>

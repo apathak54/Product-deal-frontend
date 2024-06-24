@@ -4,10 +4,11 @@ import JoditEditor from 'jodit-react';
 interface EmailPreviewProps {
   onClose: () => void;
   onSend: (template: string) => void;
+  htmlContent: string; // Assuming htmlContent is the HTML template string
 }
 
-const EmailPreview: React.FC<EmailPreviewProps> = ({ onClose, onSend }) => {
-  const [template, setTemplate] = useState('');
+const EmailPreview: React.FC<EmailPreviewProps> = ({ onClose, onSend, htmlContent }) => {
+  const [template, setTemplate] = useState(htmlContent); // Initialize template with htmlContent
 
   const handleSend = () => {
     onSend(template);
@@ -16,10 +17,9 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onClose, onSend }) => {
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Email Preview</h2>
-      <JoditEditor  className='h-96'
+      <JoditEditor
         value={template}
         onChange={setTemplate}
-       
       />
       <div className="flex justify-end space-x-2 mt-4">
         <button
@@ -32,7 +32,7 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onClose, onSend }) => {
           onClick={handleSend}
           className="px-4 py-2 border border-blue-500 rounded text-white bg-blue-500 hover:bg-blue-600"
         >
-          Send
+          Save
         </button>
       </div>
     </div>
