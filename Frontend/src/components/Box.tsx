@@ -23,6 +23,7 @@ const Box: React.FC = () => {
   const [showEmailPreview, setShowEmailPreview] = useState(false);
   const [selectedClient, setSelectedClient] = useState<RowData | null>(null);
   const [data, setData] = useState<RowData[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const rowsPerPage = 10;
@@ -104,9 +105,17 @@ const Box: React.FC = () => {
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+  //Filter data functionality
+  const filteredData = data.filter((client) =>
+        client.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        client.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        client.email.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    
+    
+  const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
 
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
@@ -115,7 +124,11 @@ const Box: React.FC = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
-
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(event.target.value);
+        setCurrentPage(1); // Reset to first page when search query changes
+      };
+    
   useEffect(() => {
     fetchWorkspaceClient();
   }, [workspaceId]);
@@ -130,6 +143,8 @@ const Box: React.FC = () => {
                 type="text"
                 placeholder="Search"
                 className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={searchQuery} // bind input value to state
+                onChange={handleSearchChange}
               />
               <select className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Status</option>
@@ -187,9 +202,11 @@ const Box: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {currentRows.map((row) => (
+                {currentRows.map((row,index) => (
                   <tr key={row._id}>
-                    <td className="px-6 py-4 whitespace-nowrap font-semibold text-md font-medium text-gray-900">{i++}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-semibold text-md font-medium text-gray-900">
+                      {(currentPage - 1) * rowsPerPage + index + 1}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-md font-semibold text-gray-500">{row.clientName}</td>
                     <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500">{row.companyName}</td>
                     <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500">{row.email}</td>
