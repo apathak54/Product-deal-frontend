@@ -12,31 +12,22 @@ interface RowData {
   companyName: string;
   clientName: string;
   email: string;
-  template:string ;
+  template: string;
   createdAt: string;
   STATUS: boolean;
 }
 
 const Box: React.FC = () => {
+  const [showImportModal, setShowImportModal] = useState(false);
   const [showModal, setShowAddModal] = useState(false);
   const [showEmailPreview, setShowEmailPreview] = useState(false);
   const [selectedClient, setSelectedClient] = useState<RowData | null>(null);
   const [data, setData] = useState<RowData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [showImportModal, setShowImportModal] = useState(false);
-  
-  
-  const { workspaceId } = useParams();
+  const { workspaceId } = useParams<{ workspaceId: string }>();
   const rowsPerPage = 10;
   let i = 1;
-  
-  const handleImportClick = () => {
-    setShowImportModal(true);
-  };
 
-  const handleAddClick = () => {
-    setShowAddModal(true);
-  };
   const fetchWorkspaceClient = async () => {
     try {
       const response = await axiosInstance.get(`/clients/${workspaceId}`);
@@ -47,14 +38,12 @@ const Box: React.FC = () => {
     }
   };
 
- 
-
   const handleDelete = async (row: RowData) => {
     try {
       const confirmDelete = window.confirm('Are you sure you want to delete this client?');
-    if (!confirmDelete) {
-      return; // Cancel deletion if user clicks cancel in the confirmation dialog
-    }
+      if (!confirmDelete) {
+        return; // Cancel deletion if user clicks cancel in the confirmation dialog
+      }
       const response = await axiosInstance.delete(`/clients/deletleoneclient/${workspaceId}/${row._id}`);
       console.log('Client deleted:', response.data);
       // Update the data state to reflect the deletion
@@ -66,6 +55,14 @@ const Box: React.FC = () => {
     }
   };
 
+  const handleImportClick = () => {
+    setShowImportModal(true);
+  };
+
+  const handleAddClick = () => {
+    setShowAddModal(true);
+  };
+
   const handleImportLeads = () => {
     setShowAddModal(true);
     console.log('Import leads');
@@ -73,6 +70,7 @@ const Box: React.FC = () => {
 
   const closeModal = () => {
     setShowAddModal(false);
+    setShowImportModal(false);
   };
 
   const closeEmailPreview = () => {
@@ -83,7 +81,7 @@ const Box: React.FC = () => {
     if (!selectedClient) return;
 
     const data = {
-      template:selectedClient.template,
+      template: selectedClient.template,
       clientId: selectedClient._id,
     };
 
@@ -126,55 +124,52 @@ const Box: React.FC = () => {
     <div className="relative mt-8 bg-white w-[90%] mx-auto flex flex-col p-4 border-sm-gray">
       {data.length > 0 ? (
         <>
-         <div className="w-[100%] p-2 pt-4 mt-2 mx-auto flex flex-col md:flex-row justify-between items-center  space-y-4 md:space-y-0 md:space-x-4 bg-gray-200">
-        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full">
-          <input
-            type="text"
-            placeholder="Search"
-            className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <select className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">Status</option>
-            <option value="open">Open</option>
-            <option value="closed">Closed</option>
-            <option value="pending">Pending</option>
-          </select>
-          <input
-            type="date"
-            className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Date"
-          />
-        </div>
-        <div className="flex space-x-4">
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onClick={handleImportClick}
-          >
-            Import
-          </button>
-          <button
-            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-            onClick={handleAddClick}
-          >
-            +
-          </button>
-        </div>
-      </div>
+          <div className="w-[100%] p-2 pt-4 mt-2 mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 bg-gray-200">
+            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full">
+              <input
+                type="text"
+                placeholder="Search"
+                className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <select className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Status</option>
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
+                <option value="pending">Pending</option>
+              </select>
+              <input
+                type="date"
+                className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Date"
+              />
+            </div>
+            <div className="flex space-x-4">
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={handleImportClick}
+              >
+                Import
+              </button>
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                onClick={handleAddClick}
+              >
+                +
+              </button>
+            </div>
+          </div>
 
-      <Modal show={showImportModal} onClose={closeModal}>
-        <div>
-         
-          {/* Add your import leads form or content here */}
-          <ImportLead onClose={closeModal}/>
-        </div>
-      </Modal>
+          <Modal show={showImportModal} onClose={closeModal}>
+            <div>
+              <ImportLead onClose={closeModal} />
+            </div>
+          </Modal>
 
-      <Modal show={showModal} onClose={closeModal}>
-        <div>
-          <AddLead onClose={closeModal}/>
-        </div>
-
-      </Modal>
+          <Modal show={showModal} onClose={closeModal}>
+            <div>
+              <AddLead onClose={closeModal} />
+            </div>
+          </Modal>
 
           <div className="overflow-x-auto w-full h-[75vh] mx-auto">
             <table className="min-w-full bg-white">
@@ -224,18 +219,10 @@ const Box: React.FC = () => {
               <div className="text-sm text-center text-gray-700">
                 {indexOfFirstRow + 1}-{Math.min(indexOfLastRow, data.length)} of {data.length}
               </div>
-              <button
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-                className="px-2 ml-2 py-2 text-gray-700 font-bold"
-              >
+              <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-2 ml-2 py-2 text-gray-700 font-bold">
                 &lt;
               </button>
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-                className="px-2 py-2 text-black font-bold"
-              >
+              <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-2 py-2 text-black font-bold">
                 &gt;
               </button>
             </div>
@@ -246,18 +233,14 @@ const Box: React.FC = () => {
           <button onClick={handleImportLeads} className="px-4 py-2 bg-blue-500 text-white rounded">
             Import Leads
           </button>
-          <Modal show={showModal} onClose={closeModal}>
-            <div>
-              <ImportLead onClose={closeModal} />
-            </div>
-          </Modal>
         </div>
       )}
+
       <Modal show={showEmailPreview} onClose={closeEmailPreview}>
         <div>
           {selectedClient && (
             <EmailPreview
-            htmlContent={selectedClient.template}
+              htmlContent={selectedClient.template}
               onClose={closeEmailPreview}
               onSend={handleEditEmail}
             />

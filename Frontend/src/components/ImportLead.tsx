@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import axiosInstance from '../config/axios';
 import { useParams } from 'react-router-dom';
 
@@ -8,29 +8,31 @@ interface Props {
 
 const ImportLead = ({ onClose }: Props) => {
   const [file, setFile] = useState<File | null>(null);
-  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { workspaceId } = useParams<{ workspaceId: string }>();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
-      setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 3000);
+      setAlertMessage('File selected successfully!');
+      setTimeout(() => setAlertMessage(null), 3000);
     }
   };
 
   const handleCancel = () => {
     setFile(null);
-    setShowAlert(false);
+    setAlertMessage(null);
     onClose();
   };
 
   const handleImport = async () => {
     if (file) {
+      setIsLoading(true);
       const formData = new FormData();
-      formData.append('file', file);
-
+      formData.append('csvfile', file); // Use 'upload-csv' instead of 'file'
+  
       try {
         const response = await axiosInstance.post(`/clients/${workspaceId}/upload-csv`, formData, {
           headers: {
@@ -38,22 +40,25 @@ const ImportLead = ({ onClose }: Props) => {
           },
         });
         console.log('File uploaded successfully:', response.data);
+        setAlertMessage('File imported successfully!');
         setFile(null);
-        setShowAlert(false);
-        alert('File imported successfully!');
-      } catch (error : any ) {
-        console.error('Error uploading file:', error.response ? error.response.data : error.message); // Log detailed error
-        alert('Failed to upload file. Please try again.');
+      } catch (error: any) {
+        console.error('Error uploading file:', error.response ? error.response.data : error.message);
+        setAlertMessage('Failed to upload file. Please try again.');
+      } finally {
+        setIsLoading(false);
+        setTimeout(() => setAlertMessage(null), 3000);
       }
     }
   };
+  
 
   return (
-    <div className="">
+    <div className="import-lead-container">
       <h1 className="font-semibold text-xl mb-4">Import Leads</h1>
-      {showAlert && (
+      {alertMessage && (
         <div className="mb-4 p-4 border border-green-300 bg-green-100 text-green-800 rounded-md">
-          File successfully uploaded!
+          {alertMessage}
         </div>
       )}
       <div className="w-full h-40 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md p-4 bg-white cursor-pointer hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -72,7 +77,7 @@ const ImportLead = ({ onClose }: Props) => {
       </div>
       {file && (
         <div className="mt-4 p-4 border border-gray-300 rounded-md bg-white shadow-sm">
-          <p className="text-gray-600">File uploaded:</p>
+          <p className="text-gray-600">File selected:</p>
           <p className="text-gray-800 font-semibold">{file.name}</p>
         </div>
       )}
@@ -85,10 +90,10 @@ const ImportLead = ({ onClose }: Props) => {
         </button>
         <button
           onClick={handleImport}
-          className="px-4 py-2 border border-blue-500 rounded-md text-white bg-blue-500 hover:bg-blue-600"
-          disabled={!file}
+          className={`px-4 py-2 border border-blue-500 rounded-md text-white bg-blue-500 hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!file || isLoading}
         >
-          Import
+          {isLoading ? 'Importing...' : 'Import'}
         </button>
       </div>
     </div>
