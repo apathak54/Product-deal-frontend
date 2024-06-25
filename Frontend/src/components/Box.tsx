@@ -29,7 +29,6 @@ const Box: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const rowsPerPage = 10;
-  let i = 1;
 
   const fetchWorkspaceClient = async () => {
     try {
@@ -47,7 +46,7 @@ const Box: React.FC = () => {
       if (!confirmDelete) {
         return; // Cancel deletion if user clicks cancel in the confirmation dialog
       }
-      const response = await axiosInstance.delete(`/clients/deletleoneclient/${workspaceId}/${row._id}`);
+      const response = await axiosInstance.delete(`/clients/deleteOneclient/${workspaceId}/${row._id}`);
       console.log('Client deleted:', response.data);
       // Update the data state to reflect the deletion
       setData(data.filter(client => client._id !== row._id));
