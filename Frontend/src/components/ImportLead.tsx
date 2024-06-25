@@ -42,6 +42,7 @@ const ImportLead = ({ onClose }: Props) => {
         console.log('File uploaded successfully:', response.data);
         setAlertMessage('File imported successfully!');
         setFile(null);
+        window.location.reload();
       } catch (error: any) {
         console.error('Error uploading file:', error.response ? error.response.data : error.message);
         setAlertMessage('Failed to upload file. Please try again.');
