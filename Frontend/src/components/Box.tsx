@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import axiosInstance from '../config/axios';
 import { useParams } from 'react-router-dom';
-import ImportLead from './ImportLead';
-import Modal from './Modal';
+import ImportLead from './ImportLead'; //to add leads through csv file
+import Modal from './Modal'; //model structure
 import EmailPreview from './EmailPreview';
-import AddLead from './AddLead';
+import AddLead from './AddLead'; // to add leads and clients one at a time
 
 interface RowData {
   _id: string;
