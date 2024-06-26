@@ -91,8 +91,8 @@ const ImportLead = ({ onClose }: Props) => {
         </button>
         <button
           onClick={handleImport}
-          className={`px-4 py-2 border border-blue-500 rounded-md text-white bg-blue-500 hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}}
-          disabled={!file || isLoading`}
+          className={`px-4 py-2 border border-blue-500 rounded-md text-white bg-blue-500 hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!file || isLoading}
         >
           {isLoading ? 'Importing...' : 'Import'}
         </button>
