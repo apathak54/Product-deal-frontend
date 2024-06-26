@@ -6,6 +6,7 @@ import ImportLead from './ImportLead'; //to add leads through csv file
 import Modal from './Modal'; //model structure
 import EmailPreview from './EmailPreview';
 import AddLead from './AddLead'; // to add leads and clients one at a time
+import EmailforEveryOne from './EmailforEveryone';
 
 interface RowData {
   _id: string;
@@ -28,7 +29,7 @@ const Box: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const { workspaceId } = useParams<{ workspaceId: string }>();
-  
+  const [email , setEmail ] = useState(false)
   const rowsPerPage = 10;
 
   const fetchWorkspaceClient = async () => {
@@ -75,6 +76,9 @@ const Box: React.FC = () => {
     setShowAddModal(false);
     setShowImportModal(false);
   };
+  const NextPage = () =>{
+    setEmail(true);
+  }
 
   const closeEmailPreview = () => {
     setShowEmailPreview(false);
@@ -203,7 +207,12 @@ const Box: React.FC = () => {
 
           <Modal show={showImportModal} onClose={closeModal}>
             <div>
-              <ImportLead onClose={closeModal} />
+              <ImportLead onClose={closeModal}  setEmail={NextPage}/>
+            </div>
+          </Modal>
+          <Modal show={email} onClose={closeModal}>
+            <div>
+              < EmailforEveryOne onClose={NextPage}  workspaceId={workspaceId}  />
             </div>
           </Modal>
 

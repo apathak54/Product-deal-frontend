@@ -4,9 +4,10 @@ import { useParams } from 'react-router-dom';
 
 interface Props {
   onClose: () => void;
+  setEmail : () => void ;
 }
 
-const ImportLead = ({ onClose }: Props) => {
+const ImportLead = ({ onClose , setEmail }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,9 +43,11 @@ const ImportLead = ({ onClose }: Props) => {
         console.log('File uploaded successfully:', response.data);
         setAlertMessage('File imported successfully!');
         setFile(null);
-        window.location.reload();
+
+        onClose();
+        setEmail();
       } catch (error) {
-        console.error('Error uploading file:', error );
+        console.error('Error uploading file:', error);
         setAlertMessage('Failed to upload file. Please try again.');
       } finally {
         setIsLoading(false);
@@ -94,7 +97,7 @@ const ImportLead = ({ onClose }: Props) => {
           className={`px-4 py-2 border border-blue-500 rounded-md text-white bg-blue-500 hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           disabled={!file || isLoading}
         >
-          {isLoading ? 'Importing...' : 'Import'}
+          {isLoading ? 'Importing...' : 'Next'}
         </button>
       </div>
     </div>
