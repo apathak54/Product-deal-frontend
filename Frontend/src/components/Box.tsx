@@ -6,7 +6,7 @@ import ImportLead from './ImportLead'; //to add leads through csv file
 import Modal from './Modal'; //model structure
 import EmailPreview from './EmailPreview';
 import AddLead from './AddLead'; // to add leads and clients one at a time
-import EmailforEveryOne from './EmailforEveryone';
+import EmailforEveryOne from './AddEmailforEveryone';
 
 interface RowData {
   _id: string;
@@ -29,7 +29,27 @@ const Box: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const { workspaceId } = useParams<{ workspaceId: string }>();
-  const [email , setEmail ] = useState(false)
+  const [email , setEmail] = useState(false);
+  
+
+  const [sending, setSending] = useState(false);
+
+  const handleSendEmailForEveryone = async () => {
+    const confirm =  window.confirm('Are you sure you want to send email for everyone , You have the option to send individually, we r sending your email in batch of 5 check once what email you wrote in edit section')
+    if(!confirm){
+      return ;
+    }
+    setSending(true);
+    try {
+      await axiosInstance.post(`/send-emails/${workspaceId}`);
+      console.log('Emails sent successfully');
+    } catch (error) {
+      console.error('Error sending emails:', error);
+    } finally {
+      setSending(false);
+    }
+  };
+
   const rowsPerPage = 10;
 
   const fetchWorkspaceClient = async () => {
@@ -62,23 +82,21 @@ const Box: React.FC = () => {
   const handleImportClick = () => {
     setShowImportModal(true);
   };
+ 
 
   const handleAddClick = () => {
     setShowAddModal(true);
   };
+  const handleAddEmailforEveryone = () =>{
+    setEmail(true)
+  }
 
-  const handleImportLeads = () => {
-    setShowAddModal(true);
-    console.log('Import leads');
-  };
 
   const closeModal = () => {
     setShowAddModal(false);
     setShowImportModal(false);
+    setEmail(false)
   };
-  const NextPage = () =>{
-    setEmail(true);
-  }
 
   const closeEmailPreview = () => {
     setShowEmailPreview(false);
@@ -146,7 +164,7 @@ const Box: React.FC = () => {
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
-
+ 
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
@@ -190,6 +208,19 @@ const Box: React.FC = () => {
               />
             </div>
             <div className="flex space-x-4">
+            <button
+          onClick={handleSendEmailForEveryone}
+          className="px-4 py-2 border border-blue-500 rounded text-white bg-blue-500 hover:bg-blue-600"
+          disabled={sending}
+        >
+          {sending ? 'Sending...' : 'Send Emails'}
+        </button>
+            <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={handleAddEmailforEveryone}
+              >
+                AddEmail
+              </button>
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={handleImportClick}
@@ -204,17 +235,17 @@ const Box: React.FC = () => {
               </button>
             </div>
           </div>
-
-          <Modal show={showImportModal} onClose={closeModal}>
-            <div>
-              <ImportLead onClose={closeModal}  setEmail={NextPage}/>
-            </div>
-          </Modal>
           <Modal show={email} onClose={closeModal}>
             <div>
-              < EmailforEveryOne onClose={NextPage}  workspaceId={workspaceId}  />
+                <EmailforEveryOne onClose={closeModal} workspaceId={workspaceId} htmlContent={data[0].template} />
             </div>
           </Modal>
+          <Modal show={showImportModal} onClose={closeModal}>
+            <div>
+              <ImportLead onClose={closeModal}  />
+            </div>
+          </Modal>
+          
 
           <Modal show={showModal} onClose={closeModal}>
             <div>
@@ -283,11 +314,33 @@ const Box: React.FC = () => {
           </div>
         </>
       ) : (
-        <div className="flex justify-center items-center bg-white w-[90%] mx-auto flex flex-col p-4 border-sm-gray h-[75vh]">
-          <button onClick={handleImportLeads} className="px-4 py-2 bg-blue-500 text-white rounded">
+        <div className="flex justify-center items-center bg-white w-[90%] mx-auto flex flex-col p-6 border border-gray-300 rounded-lg shadow-md h-[75vh]">
+        <div className="flex flex-col space-y-4">
+          <button
+            className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-150 ease-in-out"
+            onClick={handleAddClick}
+          >
+            +
+          </button>
+          <button
+            onClick={handleImportClick}
+            className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+          >
             Import Leads
           </button>
         </div>
+        <Modal show={showImportModal} onClose={closeModal}>
+          <div className="p-4">
+            <ImportLead onClose={closeModal} />
+          </div>
+        </Modal>
+        <Modal show={showModal} onClose={closeModal}>
+          <div className="p-4">
+            <AddLead onClose={closeModal} />
+          </div>
+        </Modal>
+      </div>
+        
       )}
 
       <Modal show={showEmailPreview} onClose={closeEmailPreview}>
