@@ -48,7 +48,7 @@ const Box: React.FC = () => {
       if (!confirmDelete) {
         return; // Cancel deletion if user clicks cancel in the confirmation dialog
       }
-      const response = await axiosInstance.delete(`/clients/deletleOneclient/${workspaceId}/${row._id}`);
+      const response = await axiosInstance.delete(`/clients/deleteOneclient/${workspaceId}/${row._id}`);
       console.log('Client deleted:', response.data);
       // Update the data state to reflect the deletion
       setData(data.filter(client => client._id !== row._id));
@@ -114,7 +114,7 @@ const Box: React.FC = () => {
      
       const response = await axiosInstance.get(`/clients/${workspaceId}/${row._id}/sendEmail`);
       console.log('Email Sent ', response.data);
-      // Update the data state to reflect the deletion
+      // Update the data state to reflect the submission
      
       alert('Email Sent Successfully');
      
@@ -132,7 +132,7 @@ const Box: React.FC = () => {
         client.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         client.email.toLowerCase().includes(searchQuery.toLowerCase())) && 
         (selectedStatus === '' || 
-          (selectedStatus === 'open' && client.status) ||
+          (selectedStatus === 'open' && client.status === 'read') ||
           (selectedStatus === 'closed' && client.status === 'sent') ||
           (selectedStatus === 'pending' && client.status === 'pending')) && 
           ((selectedDate === '' || client.createdAt.includes(selectedDate)))
@@ -177,8 +177,8 @@ const Box: React.FC = () => {
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Status</option>
-                <option value="open">Open</option>
-                <option value="closed">Closed</option>
+                <option value="open">Read</option>
+                <option value="closed">Sent</option>
                 <option value="pending">Pending</option>
               </select>
               <input
@@ -257,12 +257,17 @@ const Box: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-500">{row.createdAt}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-500">
-                      <div className={`w-3 h-3 ml-4 flex justify-center rounded-full ${row.status === 'sent' ? 'bg-green-500' : 'bg-red-500'}`} />
+                      {/* <div className={`w-3 h-3 ml-4 flex justify-center rounded-full ${row.status === 'sent' ? 'bg-green-500' : 'bg-red-500'}`} /> */}
+                      <div className={`w-3 h-3 ml-4 flex justify-center rounded-full
+                          ${row.status === 'sent' ? 'bg-green-500' : 
+                          row.status === 'read' ? 'bg-blue-500' : 
+                          'bg-red-500'}`}
+/>
+
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <button onClick={() => handleSend(row)} className="w-14 h-7 text-black text-center flex items-center justify-center rounded bg-yellow-500">
-                       { }
-                        {row.status === 'sent' ? 'sent' : 'send'}
+                        Send
                       </button>
                     </td>
                   </tr>
