@@ -9,7 +9,7 @@ interface EmailPreviewProps {
 }
 
 const EmailforEveryOne: React.FC<EmailPreviewProps> = ({ onClose, workspaceId , htmlContent }) => {
-  console.log(htmlContent)
+  
   const [template, setTemplate] = useState(htmlContent);
   const [saving, setSaving] = useState(false);
 

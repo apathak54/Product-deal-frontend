@@ -14,7 +14,7 @@ const AddLead = ({ onClose }: Props) => {
   const [email, setEmail] = useState('');
   const [commodity, setCommodity] = useState('');
   const [template, setTemplate] = useState('');
-
+  
   const handleAddLead = async () => {
     if (!contactPerson) {
       alert('Contact Person is required');
@@ -43,6 +43,7 @@ const AddLead = ({ onClose }: Props) => {
       email,
       commodity,
       template,
+     
     };
 
     try {

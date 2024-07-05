@@ -15,6 +15,7 @@ interface RowData {
   email: string;
   template: string;
   createdAt: string;
+  emailCnt: number;
   status: string;
 }
 
@@ -29,19 +30,19 @@ const Box: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const { workspaceId } = useParams<{ workspaceId: string }>();
-  const [email , setEmail] = useState(false);
-  
+  const [email, setEmail] = useState(false);
+
 
   const [sending, setSending] = useState(false);
 
   const handleSendEmailForEveryone = async () => {
-    const confirm =  window.confirm('Are you sure you want to send email for everyone , You have the option to send individually, we r sending your email in batch of 5 check once what email you wrote in edit section')
-    if(!confirm){
-      return ;
+    const confirm = window.confirm('Are you sure you want to send email for everyone , You have the option to send individually, we r sending your email in batch of 5 check once what email you wrote in edit section')
+    if (!confirm) {
+      return;
     }
     setSending(true);
     try {
-      await axiosInstance.post(`/send-emails/${workspaceId}`);
+      await axiosInstance.get(`/clients/send-emails/${workspaceId}`);
       console.log('Emails sent successfully');
     } catch (error) {
       console.error('Error sending emails:', error);
@@ -82,12 +83,13 @@ const Box: React.FC = () => {
   const handleImportClick = () => {
     setShowImportModal(true);
   };
- 
+
 
   const handleAddClick = () => {
     setShowAddModal(true);
   };
-  const handleAddEmailforEveryone = () =>{
+  const handleAddEmailforEveryone = () => {
+    alert('if u save ur email in {{clientName}} this format eg.. Dear {{clientName}} then it will get replace by actual name')
     setEmail(true)
   }
 
@@ -102,7 +104,7 @@ const Box: React.FC = () => {
     setShowEmailPreview(false);
   };
 
-  const handleEditEmail = async ( template : string) => {
+  const handleEditEmail = async (template: string) => {
     if (!selectedClient) return;
 
     const data = {
@@ -127,15 +129,15 @@ const Box: React.FC = () => {
     setSelectedClient(client);
     setShowEmailPreview(true);
   };
-  const handleSend = async (row: RowData)=>{
+  const handleSend = async (row: RowData) => {
     try {
-     
+
       const response = await axiosInstance.get(`/clients/${workspaceId}/${row._id}/sendEmail`);
       console.log('Email Sent ', response.data);
       // Update the data state to reflect the deletion
-     
+
       alert('Email Sent Successfully');
-     
+
     } catch (error) {
       console.error('Error Sending email', error);
       alert('Failed to send email. Please try again.');
@@ -145,18 +147,18 @@ const Box: React.FC = () => {
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   //Filter data functionality
-  const filteredData = data.filter((client : RowData) =>
-        (client.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        client.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        client.email.toLowerCase().includes(searchQuery.toLowerCase())) && 
-        (selectedStatus === '' || 
-          (selectedStatus === 'open' && client.status) ||
-          (selectedStatus === 'closed' && client.status === 'sent') ||
-          (selectedStatus === 'pending' && client.status === 'pending')) && 
-          ((selectedDate === '' || client.createdAt.includes(selectedDate)))
-      );
-    
-    
+  const filteredData = data.filter((client: RowData) =>
+    (client.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      client.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      client.email.toLowerCase().includes(searchQuery.toLowerCase())) &&
+    (selectedStatus === '' ||
+      (selectedStatus === 'open' && client.status) ||
+      (selectedStatus === 'closed' && client.status === 'sent') ||
+      (selectedStatus === 'pending' && client.status === 'pending')) &&
+    ((selectedDate === '' || client.createdAt.includes(selectedDate)))
+  );
+
+
   const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
@@ -164,15 +166,15 @@ const Box: React.FC = () => {
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
- 
+
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
-        setCurrentPage(1); // Reset to first page when search query changes
-      };
-    
+    setSearchQuery(event.target.value);
+    setCurrentPage(1); // Reset to first page when search query changes
+  };
+
   useEffect(() => {
     fetchWorkspaceClient();
   }, [workspaceId]);
@@ -190,7 +192,7 @@ const Box: React.FC = () => {
                 value={searchQuery} // bind input value to state
                 onChange={handleSearchChange}
               />
-              <select 
+              <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 className="p-2 border border-gray-300 w-full md:w-[30%] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -208,14 +210,14 @@ const Box: React.FC = () => {
               />
             </div>
             <div className="flex space-x-4">
-            <button
-          onClick={handleSendEmailForEveryone}
-          className="px-4 py-2 border border-blue-500 rounded text-white bg-blue-500 hover:bg-blue-600"
-          disabled={sending}
-        >
-          {sending ? 'Sending...' : 'Send Emails'}
-        </button>
-            <button
+              <button
+                onClick={handleSendEmailForEveryone}
+                className="px-4 py-2 border border-blue-500 rounded text-white bg-blue-500 hover:bg-blue-600"
+                disabled={sending}
+              >
+                {sending ? 'Sending...' : 'Send Emails'}
+              </button>
+              <button
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={handleAddEmailforEveryone}
               >
@@ -237,15 +239,15 @@ const Box: React.FC = () => {
           </div>
           <Modal show={email} onClose={closeModal}>
             <div>
-                <EmailforEveryOne onClose={closeModal} workspaceId={workspaceId} htmlContent={data[0].template} />
+              <EmailforEveryOne onClose={closeModal} workspaceId={workspaceId} htmlContent={data[0].template} />
             </div>
           </Modal>
           <Modal show={showImportModal} onClose={closeModal}>
             <div>
-              <ImportLead onClose={closeModal}  />
+              <ImportLead onClose={closeModal} />
             </div>
           </Modal>
-          
+
 
           <Modal show={showModal} onClose={closeModal}>
             <div>
@@ -269,7 +271,7 @@ const Box: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {currentRows.map((row,index) => (
+                {currentRows.map((row, index) => (
                   <tr key={row._id}>
                     <td className="px-6 py-4 whitespace-nowrap font-semibold text-md font-medium text-gray-900">
                       {(currentPage - 1) * rowsPerPage + index + 1}
@@ -278,11 +280,11 @@ const Box: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500">{row.companyName}</td>
                     <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500">{row.email}</td>
                     <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500">{`${row.clientName} ${row.companyName}`}</td>
-                    <td className="px-6 py-4 whitespace-nowrap font-semibold text-md text-gray-500 ">
-                      <button onClick={() => handleSendClick(row)} className="text-yellow-500 ml-2">
+                    <td className="px-6 py-4 space-x-4 whitespace-nowrap font-semibold text-md text-gray-500 ">
+                      <button onClick={() => handleSendClick(row)} className="text-yellow-500 text-center">
                         <FaEdit />
                       </button>
-                      <button onClick={() => handleDelete(row)} className="ml-4 text-yellow-500">
+                      <button onClick={() => handleDelete(row)} className="text-center text-yellow-500">
                         <FaTrashAlt />
                       </button>
                     </td>
@@ -291,11 +293,19 @@ const Box: React.FC = () => {
                       <div className={`w-3 h-3 ml-4 flex justify-center rounded-full ${row.status === 'sent' ? 'bg-green-500' : 'bg-red-500'}`} />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <button onClick={() => handleSend(row)} className="w-14 h-7 text-black text-center flex items-center justify-center rounded bg-yellow-500">
-                       { }
-                        {row.status === 'sent' ? 'sent' : 'send'}
+                      <button
+                        onClick={() => handleSend(row)}
+                        className="w-16 h-7 text-black text-center flex items-center justify-center rounded bg-yellow-500 hover:bg-yellow-600 hover:text-white transition-colors duration-300"
+                      >
+                        <span className="mr-2">
+                          {row.status === 'sent' ? 'Sent' : 'Send'}
+                        </span>
+                        <span className="  hover:bg-yellow-600 hover:text-white transition-colors duration-300">
+                          ({row.emailCnt})
+                        </span>
                       </button>
                     </td>
+
                   </tr>
                 ))}
               </tbody>
@@ -315,32 +325,32 @@ const Box: React.FC = () => {
         </>
       ) : (
         <div className="flex justify-center items-center bg-white w-[90%] mx-auto flex flex-col p-6 border border-gray-300 rounded-lg shadow-md h-[75vh]">
-        <div className="flex flex-col space-y-4">
-          <button
-            className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-150 ease-in-out"
-            onClick={handleAddClick}
-          >
-            +
-          </button>
-          <button
-            onClick={handleImportClick}
-            className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-          >
-            Import Leads
-          </button>
+          <div className="flex flex-col space-y-4">
+            <button
+              className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-150 ease-in-out"
+              onClick={handleAddClick}
+            >
+              +
+            </button>
+            <button
+              onClick={handleImportClick}
+              className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+            >
+              Import Leads
+            </button>
+          </div>
+          <Modal show={showImportModal} onClose={closeModal}>
+            <div className="p-4">
+              <ImportLead onClose={closeModal} />
+            </div>
+          </Modal>
+          <Modal show={showModal} onClose={closeModal}>
+            <div className="p-4">
+              <AddLead onClose={closeModal} />
+            </div>
+          </Modal>
         </div>
-        <Modal show={showImportModal} onClose={closeModal}>
-          <div className="p-4">
-            <ImportLead onClose={closeModal} />
-          </div>
-        </Modal>
-        <Modal show={showModal} onClose={closeModal}>
-          <div className="p-4">
-            <AddLead onClose={closeModal} />
-          </div>
-        </Modal>
-      </div>
-        
+
       )}
 
       <Modal show={showEmailPreview} onClose={closeEmailPreview}>
