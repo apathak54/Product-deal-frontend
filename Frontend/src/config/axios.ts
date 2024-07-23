@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 //creating the base url
-const baseURL = 'http://localhost:8080'
+//const baseURL = 'http://localhost:8080'
+const baseURL = 'https://product-deal-backend-fchy.onrender.com'
 
 // Create an instance of Axios with default configuration
 const axiosInstance: AxiosInstance = axios.create({
