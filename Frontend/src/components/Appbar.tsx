@@ -16,8 +16,8 @@ const Appbar = () => {
 };
 
   return (
-    <div className="w-full flex justify-between items-center px-6 py-4 bg-white shadow-md">
-      <div className="flex items-center justify-center space-x-4">
+    <div className="w-[90%] flex justify-between items-center px-6 py-4 bg-white rounded-2xl shadow-md">
+      <div className="flex items-center justify-center space-x-4 h-[20%]">
         <button className="p-2">
           <svg
             className="w-6 h-6 text-gray-600"

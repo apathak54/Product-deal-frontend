@@ -87,13 +87,13 @@ const ImportLead = ({ onClose  }: Props) => {
       <div className="mt-4 flex justify-end space-x-2">
         <button
           onClick={handleCancel}
-          className="px-4 py-2 border border-gray-300 rounded-md text-gray-600 bg-white hover:bg-gray-100"
+          className="px-4 py-2  rounded-md text-gray-900 font-medium text-2xl bg-white hover:bg-gray-100"
         >
           Cancel
         </button>
         <button
           onClick={handleImport}
-          className={`px-4 py-2 border border-blue-500 rounded-md text-white bg-blue-500 hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`px-4 py-2 border border-blue-500 rounded-xl text-white bg-[#6F00FF] hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           disabled={!file || isLoading}
         >
           {isLoading ? 'Importing...' : 'Import'}

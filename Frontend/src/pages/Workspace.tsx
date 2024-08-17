@@ -71,14 +71,17 @@ const WorkspaceList: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col bg-gray-100 min-h-screen">
+    <div className="flex flex-col bg-gray-100 min-h-screen bg-gradient-to-b from-gray-400 to-[#ffffff]">
+      <div className='flex justify-center items-center p-4 '>
+
       <Appbar />
-      <div className="p-4">
+      </div>
+        <div className='flex justify-between px-8 py-4 items-center '>
         <h1 className="text-3xl font-bold mb-4">Workspaces</h1>
         <div className="mb-4">
-          <label className="text-gray-600 mr-2">Sort:</label>
+          <label className="text-xl text-black mr-2">Sort By</label>
           <select
-            className="text-blue-600 underline"
+            className="text-gray-700 m-2 h-8 rounded-md"
             value={sortOption}
             onChange={handleSortChange}
           >
@@ -86,6 +89,9 @@ const WorkspaceList: React.FC = () => {
             <option value="alphabetically">Alphabetically</option>
           </select>
         </div>
+        </div>
+      <div className="p-4 ">
+        
         <div className="flex flex-wrap  justify-center items-center gap-4">
           {workspaces.map((workspace) => (
             <WorkspaceCard

@@ -212,30 +212,32 @@ const Box: React.FC = () => {
             <div className="flex space-x-4">
               <button
                 onClick={handleSendEmailForEveryone}
-                className="px-4 py-2 border border-blue-500 rounded text-white bg-blue-500 hover:bg-blue-600"
+                className="px-4 py-2 border border-purple-600 rounded text-white bg-purple-600 font-bold hover:bg-purple-700"
                 disabled={sending}
               >
                 {sending ? 'Sending...' : 'Send Emails'}
               </button>
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2 bg-purple-600 font-bold text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-700"
                 onClick={handleAddEmailforEveryone}
               >
-                AddEmail
+                Add Email
               </button>
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2 bg-purple-600 font-bold text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-700"
                 onClick={handleImportClick}
               >
                 Import
               </button>
               <button
-                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="px-4 py-2 bg-purple-600 font-bold text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-800"
                 onClick={handleAddClick}
               >
                 +
               </button>
             </div>
+
+
           </div>
           <Modal show={email} onClose={closeModal}>
             <div>
@@ -327,14 +329,14 @@ const Box: React.FC = () => {
         <div className="flex justify-center items-center bg-white w-[90%] mx-auto flex flex-col p-6 border border-gray-300 rounded-lg shadow-md h-[75vh]">
           <div className="flex flex-col space-y-4">
             <button
-              className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-150 ease-in-out"
+              className="px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-150 ease-in-out"
               onClick={handleAddClick}
             >
               +
             </button>
             <button
               onClick={handleImportClick}
-              className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+              className="px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
             >
               Import Leads
             </button>
