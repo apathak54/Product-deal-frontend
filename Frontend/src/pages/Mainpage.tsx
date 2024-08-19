@@ -38,11 +38,11 @@ const MainPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center ">
       <div className="flex flex-col md:flex-row w-full h-screen shadow-lg overflow-hidden rounded-lg ">
         {/* Left Side - Illustration */}
-        <div className="w-full md:w-1/2 flex items-center justify-center ">
+        <div className="w-full h-screen md:w-1/2 flex items-center justify-center ">
           <img
             src={leftjpg}
             alt="3D Blocks Illustration"
-            className="w-full object-contain"
+            className="w-full h-full object-cover"
           />
         </div>
 
